@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文献综述思维导图框架 · 11 篇论文</title>
+<style>
+  :root{
+    --bg:#f5f7fa; --card:#ffffff; --ink:#1f2937; --muted:#6b7280; --line:#d9e0e8;
+    --c1:#3b6fb6; --c2:#0e8f8f; --c3:#c0392b; --c4:#7c4dbe; --c5:#2e8b57; --c6:#d1832b; --c7:#54657c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",-apple-system,sans-serif;
+    line-height:1.6;padding:28px 18px 60px}
+  .wrap{max-width:1180px;margin:0 auto}
+  header{text-align:center;margin-bottom:26px}
+  h1{font-size:26px;margin:0 0 8px;letter-spacing:.5px}
+  .sub{color:var(--muted);font-size:14px;max-width:900px;margin:0 auto}
+  .keyword{display:inline-block;background:#eaf0f8;color:#1e3a5f;border-radius:4px;padding:1px 6px;margin:0 2px;font-weight:600}
+  .toolbar{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:18px 0 8px}
+  .toolbar input{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;width:280px;background:#fff}
+  .toolbar button{border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:13px;background:#fff;cursor:pointer;color:var(--ink)}
+  .toolbar button:hover{background:#eef3f9}
+  #info{display:none;max-width:900px;margin:10px auto 0;padding:10px 16px;border-radius:8px;
+    background:#fff8e6;border:1px solid #f0d9a0;font-size:13px;text-align:center;color:#7a5a12}
+  #info b{color:#8a4b08}
+
+  /* 中心节点 */
+  .root{position:relative;max-width:760px;margin:22px auto 0;padding:20px 26px;border-radius:14px;
+    background:linear-gradient(135deg,#1e3a5f,#2c5a8c);color:#fff;text-align:center;
+    box-shadow:0 8px 24px rgba(30,58,95,.22)}
+  .root .t{font-size:19px;font-weight:700;letter-spacing:.5px}
+  .root .d{font-size:13px;opacity:.9;margin-top:8px}
+  .root .tags{margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .root .tags span{font-size:12px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);
+    border-radius:20px;padding:3px 12px}
+  .stem{width:2px;height:26px;background:var(--line);margin:0 auto}
+
+  /* 分支 */
+  .branches{position:relative;max-width:1120px;margin:0 auto;padding-left:0}
+  .branches::before{content:"";position:absolute;left:26px;top:0;bottom:24px;width:2px;background:var(--line)}
+  .branch{position:relative;margin:0 0 18px 0;padding-left:64px}
+  .branch::before{content:"";position:absolute;left:26px;top:30px;width:38px;height:2px;background:var(--line)}
+  .badge{position:absolute;left:8px;top:18px;width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,.12)}
+  .b1 .badge{background:var(--c1)} .b2 .badge{background:var(--c2)} .b3 .badge{background:var(--c3)}
+  .b4 .badge{background:var(--c4)} .b5 .badge{background:var(--c5)} .b6 .badge{background:var(--c6)}
+  .b7 .badge{background:var(--c7)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    box-shadow:0 2px 10px rgba(31,41,55,.05)}
+  .b1 .card{border-left:4px solid var(--c1)} .b2 .card{border-left:4px solid var(--c2)}
+  .b3 .card{border-left:4px solid var(--c3)} .b4 .card{border-left:4px solid var(--c4)}
+  .b5 .card{border-left:4px solid var(--c5)} .b6 .card{border-left:4px solid var(--c6)}
+  .b7 .card{border-left:4px solid var(--c7)}
+  .chead{padding:12px 18px;border-bottom:1px solid #eef1f5;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .chead .name{font-size:16px;font-weight:700}
+  .chead .q{font-size:12.5px;color:var(--muted)}
+  .core{font-size:11px;background:#fdecea;color:var(--c3);border-radius:4px;padding:2px 8px;font-weight:700}
+  ul{list-style:none;margin:0;padding:8px 18px 14px}
+  li{padding:8px 0;border-bottom:1px dashed #edf0f4;font-size:13.5px}
+  li:last-child{border-bottom:none}
+  .st{font-weight:600;color:#374151}
+  .st .no{color:var(--muted);font-weight:400;margin-right:6px}
+  .desc{color:var(--muted);font-size:12.5px;margin:2px 0 6px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;border-radius:6px;
+    padding:2px 8px;border:1px solid #d6dfeb;background:#f3f7fc;color:#274a75;cursor:pointer;
+    transition:all .15s;white-space:nowrap}
+  .chip:hover{border-color:#7aa2d4;background:#e6eff9}
+  .chip b{font-size:10.5px;opacity:.8}
+  .chip.dim{opacity:.25}
+  .chip.active{background:#1e3a5f;color:#fff;border-color:#1e3a5f;box-shadow:0 0 0 2px rgba(30,58,95,.25)}
+  .chip.hit{background:#fff2cc;border-color:#e0b34d;color:#7a5a12;box-shadow:0 0 0 2px rgba(224,179,77,.3)}
+
+  /* 表格区 */
+  section.tbl{max-width:1120px;margin:34px auto 0;background:#fff;border:1px solid var(--line);
+    border-radius:12px;padding:18px 20px;box-shadow:0 2px 10px rgba(31,41,55,.05)}
+  section.tbl h2{font-size:17px;margin:0 0 4px}
+  section.tbl .note{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{border:1px solid #e8edf3;padding:6px 8px;text-align:center}
+  th{background:#f2f6fb;font-weight:600;color:#374151}
+  td.l{text-align:left}
+  .dot{color:var(--c3);font-weight:700}
+  .odot{color:#9aa5b1}
+  .idx td{font-size:12px}
+  .idx td:first-child{font-weight:700;color:#1e3a5f;white-space:nowrap}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px}
+  @media (max-width:720px){
+    .branches::before{left:18px} .branch{padding-left:48px} .branch::before{left:18px;width:30px}
+    .badge{left:0;width:34px;height:34px} .chead .q{width:100%}
+    section.tbl{overflow-x:auto} table{min-width:720px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>文献综述思维导图框架 · 11 篇论文</h1>
+  <p class="sub">中心主题：<b>农村公共产品供给与基层治理的有效性</b>——政府资源如何经由恰当的优先序、制度与机制，转化为有效、公平、可持续的供给与治理。<br>
+  贯穿命题：政府干预的有效性取决于<span class="keyword">信息能力</span>×<span class="keyword">激励结构</span>×<span class="keyword">制度安排</span>的匹配；"易考核、测得准"的维度获得过度资源，"难测量、需长效"的维度被系统性忽视；出路在于需求表达机制、政府与社会有机结合、农民从"管理对象"复位为"参与主体"。</p>
+  <div class="toolbar">
+    <input id="search" type="text" placeholder="输入编号或作者，如 P8 / 邢成举 / Holmstrom">
+    <button id="reset" type="button">重置高亮</button>
+    <span style="font-size:12px;color:var(--muted)">点击论文标签可跨分支高亮同一篇文献</span>
+  </div>
+  <div id="info"></div>
+</header>
+
+<div class="root">
+  <div class="t">农村公共产品供给与基层治理的有效性</div>
+  <div class="d">理论工具 → 投向哪里 → 为何失效 → 走向何种模式 → 如何调动人 → 方法谱系 → 研究缺口</div>
+  <div class="tags"><span>11 篇文献</span><span>7 大分支</span><span>32 个子主题</span><span>1991—2023</span><span>建模 / 定量 / 质性 / 混合</span></div>
+</div>
+<div class="stem"></div>
+
+<div class="branches" id="branches">
+
+  <!-- 分支 1 -->
+  <div class="branch b1"><div class="badge">1</div><div class="card">
+    <div class="chead"><span class="name">理论基础与分析工具</span><span class="q">用什么理论工具观察农村公共产品供给与治理？</span></div>
+    <ul>
+      <li><div class="st"><span class="no">1.1</span>公共产品与供给结构理论</div><div class="desc">Samuelson→Tiebout→Buchanan 脉络；供求均衡与最优供给；硬/软公共产品属性差异</div><div class="chips"><span class="chip" data-p="P9"><b>P9</b>睢党臣 2007</span><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span></div></li>
+      <li><div class="st"><span class="no">1.2</span>多任务委托—代理与可测量性</div><div class="desc">一维模型局限；α=(I+rC″Σ)⁻¹B′；绩效可测量性决定激励强度、资产所有权与工作设计</div><div class="chips"><span class="chip" data-p="P2"><b>P2</b>Holmstrom &amp; Milgrom 1991</span></div></li>
+      <li><div class="st"><span class="no">1.3</span>项目制与国家治理理论</div><div class="desc">分税制→项目制作为新治理体制；分级运作、控制权；资源下乡与政绩逻辑</div><div class="chips"><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P5"><b>P5</b>张兴祥等 2023</span><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span></div></li>
+      <li><div class="st"><span class="no">1.4</span>参与式治理、共同体与制度分析</div><div class="desc">奥斯特罗姆情景适应论；斯科特"国家项目失败四要素"；共同体理论；双轨政治</div><div class="chips"><span class="chip" data-p="P7"><b>P7</b>唐丽霞等 2022</span><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span><span class="chip" data-p="P5"><b>P5</b>张兴祥等 2023</span><span class="chip" data-p="P6"><b>P6</b>柴盈等 2012</span></div></li>
+    </ul>
+  </div></div>
+
+  <!-- 分支 2 -->
+  <div class="branch b2"><div class="badge">2</div><div class="card">
+    <div class="chead"><span class="name">供给什么：需求 · 结构 · 优先序</span><span class="q">有限的公共资源应优先投向哪里？</span></div>
+    <ul>
+      <li><div class="st"><span class="no">2.1</span>供给内容结构与优先顺序</div><div class="desc">基础设施/基础教育/医疗卫生三组分；四维排序＋德尔菲集成：医疗＞教育＞基建</div><div class="chips"><span class="chip" data-p="P9"><b>P9</b>睢党臣 2007</span></div></li>
+      <li><div class="st"><span class="no">2.2</span>需求结构与供需失衡</div><div class="desc">需求意愿/消费支出/边际消费倾向/收入弹性；认可度模型；软服务需求长期性；表达机制缺失</div><div class="chips"><span class="chip" data-p="P9"><b>P9</b>睢党臣 2007</span><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P3"><b>P3</b>胡玉杰等 2019</span></div></li>
+      <li><div class="st"><span class="no">2.3</span>财政体制与资源投入规模</div><div class="desc">财政分权三指标、"工业反哺农业"、支农资金增长、项目资源集中分配</div><div class="chips"><span class="chip" data-p="P3"><b>P3</b>胡玉杰等 2019</span><span class="chip" data-p="P6"><b>P6</b>柴盈等 2012</span><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span><span class="chip" data-p="P9"><b>P9</b>睢党臣 2007</span></div></li>
+      <li><div class="st"><span class="no">2.4</span>产业政策与投资效率</div><div class="desc">产业政策存废之争；政府补助与长期负债；投资效率残差度量；水利投资效率</div><div class="chips"><span class="chip" data-p="P4"><b>P4</b>王克敏等 2017</span><span class="chip" data-p="P6"><b>P6</b>柴盈等 2012</span></div></li>
+    </ul>
+  </div></div>
+
+  <!-- 分支 3 -->
+  <div class="branch b3"><div class="badge">3</div><div class="card">
+    <div class="chead"><span class="name">为何失效：治理失效的机制诊断</span><span class="core">★ 核心分支</span><span class="q">投入为何没有转化为有效治理？六条机制相互叠加</span></div>
+    <ul>
+      <li><div class="st"><span class="no">3.1</span>信息不对称与识别失灵</div><div class="desc">"扶持之手"因信息不足错配；上年效率越低反获更多支持；测量成本的一般理论</div><div class="chips"><span class="chip" data-p="P4"><b>P4</b>王克敏等 2017</span><span class="chip" data-p="P2"><b>P2</b>H&amp;M 1991</span><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span></div></li>
+      <li><div class="st"><span class="no">3.2</span>考核与激励扭曲</div><div class="desc">晋升激励/GDP 考核致重基建轻民生；领导注意力与政绩偏好叠加；达标压力型体制与资格锦标赛</div><div class="chips"><span class="chip" data-p="P3"><b>P3</b>胡玉杰等 2019</span><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span><span class="chip" data-p="P4"><b>P4</b>王克敏等 2017</span></div></li>
+      <li><div class="st"><span class="no">3.3</span>项目制的内在限度</div><div class="desc">一次性/有限任务 vs 整体性/持续性治理；政府项目化与基层治理"脱嵌"；村民变"表演者"</div><div class="chips"><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P5"><b>P5</b>张兴祥等 2023</span><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span></div></li>
+      <li><div class="st"><span class="no">3.4</span>体制与结构惯性</div><div class="desc">计划型文化动员体制、超长委托代理链、格式化供给、多头碎片化；政社一体化管控惯性</div><div class="chips"><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span><span class="chip" data-p="P6"><b>P6</b>柴盈等 2012</span></div></li>
+      <li><div class="st"><span class="no">3.5</span>资源陷阱与分配固化</div><div class="desc">亮点造点边际效益递减；马太效应/精英俘获/分利秩序；村级债务；投资激增而效益萎缩</div><div class="chips"><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span><span class="chip" data-p="P6"><b>P6</b>柴盈等 2012</span><span class="chip" data-p="P4"><b>P4</b>王克敏等 2017</span></div></li>
+      <li><div class="st"><span class="no">3.6</span>可测量性偏向（重硬轻软 · 元机制）</div><div class="desc">贯通全部实证发现的一般机制：测得准的维度获过度资源，需长效的维度被忽视</div><div class="chips"><span class="chip" data-p="P2"><b>P2</b>H&amp;M 1991</span><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P3"><b>P3</b>胡玉杰等 2019</span><span class="chip" data-p="P9"><b>P9</b>睢党臣 2007</span><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span></div></li>
+    </ul>
+  </div></div>
+
+  <!-- 分支 4 -->
+  <div class="branch b4"><div class="badge">4</div><div class="card">
+    <div class="chead"><span class="name">治理模式的演进与超越</span><span class="q">应走向何种治理模式？</span></div>
+    <ul>
+      <li><div class="st"><span class="no">4.1</span>项目制：批判—反思—超越</div><div class="desc">治理脱嵌而非天生短命 → 与持续性治理的结构性矛盾 → 资源陷阱与经验不可推广</div><div class="chips"><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P5"><b>P5</b>张兴祥等 2023</span><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span></div></li>
+      <li><div class="st"><span class="no">4.2</span>管控式→参与式三形态</div><div class="desc">自主式（家元共同体）—管控式（河长制）—参与式；模式转型的历史类型学</div><div class="chips"><span class="chip" data-p="P11"><b>P11</b>李波 2018</span></div></li>
+      <li><div class="st"><span class="no">4.3</span>共同体与结构性融合</div><div class="desc">"价值共识—责任共担—利益共享"治理共同体；项目制与基层治理结构性融合</div><div class="chips"><span class="chip" data-p="P5"><b>P5</b>张兴祥等 2023</span><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P7"><b>P7</b>唐丽霞等 2022</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span></div></li>
+      <li><div class="st"><span class="no">4.4</span>制度形态选择</div><div class="desc">四种管理制度效率排序：准公共部门＞联合管理＞公共部门＞用水户管理；公法人化</div><div class="chips"><span class="chip" data-p="P6"><b>P6</b>柴盈等 2012</span></div></li>
+    </ul>
+  </div></div>
+
+  <!-- 分支 5 -->
+  <div class="branch b5"><div class="badge">5</div><div class="card">
+    <div class="chead"><span class="name">农民主体性与参与机制</span><span class="q">如何让人真正动起来？</span></div>
+    <ul>
+      <li><div class="st"><span class="no">5.1</span>主体地位与参与选择权</div><div class="desc">从"表演者/管理对象"到"主体"；剥夺参与选择权导致衰亡；共享决策/配置/分配权</div><div class="chips"><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span><span class="chip" data-p="P7"><b>P7</b>唐丽霞等 2022</span></div></li>
+      <li><div class="st"><span class="no">5.2</span>参与机制工具箱</div><div class="desc">激励（积分制）—引导（村规民约）—规制（信用体系）三元机制；四维度比较框架</div><div class="chips"><span class="chip" data-p="P7"><b>P7</b>唐丽霞等 2022</span></div></li>
+      <li><div class="st"><span class="no">5.3</span>参与实现条件</div><div class="desc">互相认同、主体赋权、协商民主、社会自治；生态公民；需求表达反馈、自组织与新乡贤</div><div class="chips"><span class="chip" data-p="P11"><b>P11</b>李波 2018</span><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span><span class="chip" data-p="P7"><b>P7</b>唐丽霞等 2022</span></div></li>
+      <li><div class="st"><span class="no">5.4</span>参与的乡土社会基础约束</div><div class="desc">个体化、精英谋利化、村庄离心化、组织原子化、项目资源被分利秩序截留</div><div class="chips"><span class="chip" data-p="P11"><b>P11</b>李波 2018</span><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span></div></li>
+    </ul>
+  </div></div>
+
+  <!-- 分支 6 -->
+  <div class="branch b6"><div class="badge">6</div><div class="card">
+    <div class="chead"><span class="name">研究方法与数据谱系</span><span class="q">这批文献如何生产知识？</span></div>
+    <ul>
+      <li><div class="st"><span class="no">6.1</span>形式化建模</div><div class="desc">线性—CARA—正态框架；7 个命题；激励、所有权、工作设计的统一模型</div><div class="chips"><span class="chip" data-p="P2"><b>P2</b>H&amp;M 1991</span></div></li>
+      <li><div class="st"><span class="no">6.2</span>定量实证</div><div class="desc">省际面板固定效应；大样本回归＋政策变更外生冲击；C-D/Granger/偏相关/德尔菲；21 省 282 村问卷</div><div class="chips"><span class="chip" data-p="P3"><b>P3</b>胡玉杰等 2019</span><span class="chip" data-p="P4"><b>P4</b>王克敏等 2017</span><span class="chip" data-p="P9"><b>P9</b>睢党臣 2007</span><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span></div></li>
+      <li><div class="st"><span class="no">6.3</span>质性案例与比较制度分析</div><div class="desc">单案例生命历程展演；多案例比较；双案例比较制度分析＋情景测算；驻村深描；历史类型学</div><div class="chips"><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P7"><b>P7</b>唐丽霞等 2022</span><span class="chip" data-p="P6"><b>P6</b>柴盈等 2012</span><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span><span class="chip" data-p="P5"><b>P5</b>张兴祥等 2023</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span></div></li>
+      <li><div class="st"><span class="no">6.4</span>测量难题与识别策略创新</div><div class="desc">软公共服务不易测量；认可度模型；两阶段准实验；Hausman/LLC/IPS 检验；外生冲击排内生性</div><div class="chips"><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P3"><b>P3</b>胡玉杰等 2019</span><span class="chip" data-p="P4"><b>P4</b>王克敏等 2017</span><span class="chip" data-p="P2"><b>P2</b>H&amp;M 1991</span></div></li>
+    </ul>
+  </div></div>
+
+  <!-- 分支 7 -->
+  <div class="branch b7"><div class="badge">7</div><div class="card">
+    <div class="chead"><span class="name">研究缺口与未来议程</span><span class="q">综述如何收束为本研究的问题意识？</span></div>
+    <ul>
+      <li><div class="st"><span class="no">7.1</span>静态截面→生命历程 / 历史类型学</div><div class="desc">既有研究多为截面观察，缺动态追踪</div><div class="chips"><span class="chip" data-p="P1"><b>P1</b>余成龙等 2019</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span></div></li>
+      <li><div class="st"><span class="no">7.2</span>单维→多维排序与集成</div><div class="desc">优先序研究仅依需求意愿单维</div><div class="chips"><span class="chip" data-p="P9"><b>P9</b>睢党臣 2007</span></div></li>
+      <li><div class="st"><span class="no">7.3</span>政府视角→村庄 / 农民视角</div><div class="desc">把可持续视为"政策供给的后果"，缺在地化理解</div><div class="chips"><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span><span class="chip" data-p="P7"><b>P7</b>唐丽霞等 2022</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span></div></li>
+      <li><div class="st"><span class="no">7.4</span>工具修补→结构 / 体制重构</div><div class="desc">停留在项目层面对策，未追问体制根源</div><div class="chips"><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span><span class="chip" data-p="P5"><b>P5</b>张兴祥等 2023</span><span class="chip" data-p="P11"><b>P11</b>李波 2018</span></div></li>
+      <li><div class="st"><span class="no">7.5</span>可推广性与边界条件</div><div class="desc">共享性/专享性条件、内生性/外生性经验、一村一策</div><div class="chips"><span class="chip" data-p="P8"><b>P8</b>邢成举等 2023</span><span class="chip" data-p="P7"><b>P7</b>唐丽霞等 2022</span><span class="chip" data-p="P6"><b>P6</b>柴盈等 2012</span></div></li>
+      <li><div class="st"><span class="no">7.6</span>未竟议题</div><div class="desc">软公共服务质量测量；长效财政与制度激励；数字技术下需求表达；跨治理模式比较与匹配条件</div><div class="chips"><span class="chip" data-p="P2"><b>P2</b>H&amp;M 1991</span><span class="chip" data-p="P9"><b>P9</b>睢党臣 2007</span><span class="chip" data-p="P10"><b>P10</b>傅才武等 2020</span><span class="chip" data-p="P6"><b>P6</b>柴盈等 2012</span></div></li>
+    </ul>
+  </div></div>
+
+</div>
+
+<section class="tbl">
+  <h2>论文—分支归属矩阵</h2>
+  <p class="note">● 主要归属（该文核心贡献所在）｜○ 次要关联（可作佐证或对话）｜— 无直接关联。第 3 列与第 7 列几乎全满：11 篇共享"反差→诊断隐藏假设→新切口重置命题"的问题意识。</p>
+  <table>
+    <thead><tr><th>论文</th><th>1 理论</th><th>2 供给什么</th><th>3 失效诊断</th><th>4 模式演进</th><th>5 农民主体</th><th>6 方法</th><th>7 缺口</th></tr></thead>
+    <tbody>
+      <tr><td class="l">P1 余成龙等(2019)</td><td class="dot">●</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td></tr>
+      <tr><td class="l">P2 Holmstrom &amp; Milgrom(1991)</td><td class="dot">●</td><td>—</td><td class="dot">●</td><td>—</td><td>—</td><td class="dot">●</td><td class="odot">○</td></tr>
+      <tr><td class="l">P3 胡玉杰等(2019)</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td><td>—</td><td>—</td><td class="dot">●</td><td class="odot">○</td></tr>
+      <tr><td class="l">P4 王克敏等(2017)</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td><td>—</td><td>—</td><td class="dot">●</td><td class="odot">○</td></tr>
+      <tr><td class="l">P5 张兴祥等(2023)</td><td class="odot">○</td><td>—</td><td class="dot">●</td><td class="dot">●</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td></tr>
+      <tr><td class="l">P6 柴盈等(2012)</td><td class="odot">○</td><td class="dot">●</td><td class="odot">○</td><td class="dot">●</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td></tr>
+      <tr><td class="l">P7 唐丽霞等(2022)</td><td class="dot">●</td><td>—</td><td class="odot">○</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td></tr>
+      <tr><td class="l">P8 邢成举等(2023)</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td></tr>
+      <tr><td class="l">P9 睢党臣(2007)</td><td class="dot">●</td><td class="dot">●</td><td class="odot">○</td><td>—</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td></tr>
+      <tr><td class="l">P10 傅才武等(2020)</td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td><td class="odot">○</td><td class="odot">○</td><td class="dot">●</td><td class="dot">●</td></tr>
+      <tr><td class="l">P11 李波(2018)</td><td class="dot">●</td><td>—</td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="tbl">
+  <h2>11 篇论文索引</h2>
+  <p class="note">按编号排序；点击上图中的任意论文标签，可查看该文在全部分支中的分布。</p>
+  <table class="idx">
+    <thead><tr><th>编号</th><th>作者 / 年份</th><th>题名</th><th>出处</th></tr></thead>
+    <tbody>
+      <tr><td>P1</td><td>余成龙、冷向明 2019</td><td class="l">《"项目制"悖论抑或治理问题——农村公共服务项目制供给与可持续发展》</td><td>《公共管理学报》16(2)</td></tr>
+      <tr><td>P2</td><td>Holmstrom &amp; Milgrom 1991</td><td class="l">Multitask Principal-Agent Analyses: Incentive Contracts, Asset Ownership, and Job Design</td><td>JLEO, 7(SI)</td></tr>
+      <tr><td>P3</td><td>胡玉杰、彭徽 2019</td><td class="l">《财政分权、晋升激励与农村医疗卫生公共服务供给》</td><td>《当代财经》(4)</td></tr>
+      <tr><td>P4</td><td>王克敏等 2017</td><td class="l">《产业政策、政府支持与公司投资效率研究》</td><td>《管理世界》(3)</td></tr>
+      <tr><td>P5</td><td>张兴祥、何昊翰 2023</td><td class="l">《从项目制到共同体构建：农村人居环境治理的运行向路》</td><td>《福建师范大学学报》(3)</td></tr>
+      <tr><td>P6</td><td>柴盈、曾云敏 2012</td><td class="l">《管理制度对我国农田水利政府投资效率的影响——基于我国山东省和台湾省的比较分析》</td><td>《农业经济问题》(2)</td></tr>
+      <tr><td>P7</td><td>唐丽霞、丁悦 2022</td><td class="l">《激励、引导和规制：乡村振兴中农民主体作用何以有效发挥？》</td><td>《贵州社会科学》(8)</td></tr>
+      <tr><td>P8</td><td>邢成举、吴春来 2023</td><td class="l">《领导注意力、项目分配与政策投入的资源陷阱——示范村经验何以难示范》</td><td>《公共管理学报》(4)</td></tr>
+      <tr><td>P9</td><td>睢党臣 2007</td><td class="l">《农村公共产品供给结构研究》（博士论文）</td><td>陕西师范大学</td></tr>
+      <tr><td>P10</td><td>傅才武、刘倩 2020</td><td class="l">《农村公共文化服务供需失衡背后的体制溯源——以文化惠民工程为中心的调查》</td><td>《山东大学学报》(1)</td></tr>
+      <tr><td>P11</td><td>李波 2018</td><td class="l">《农村环境治理——从管控式治理向参与式治理的转变》（博士论文）</td><td>南京农业大学</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>文献综述思维导图框架 · 由 11 篇论文解读汇总生成 · 点击标签高亮 / 搜索框过滤 · 可直接打印为 PDF</footer>
+
+</div>
+
+<script>
+  var PAPERS = {
+    "P1":"余成龙、冷向明（2019）《\"项目制\"悖论抑或治理问题》——《公共管理学报》：硬/软公共产品属性；治理脱嵌而非项目制悖论。",
+    "P2":"Holmstrom & Milgrom（1991）Multitask Principal-Agent Analyses — JLEO：多任务委托代理；绩效可测量性决定激励强度与治理工具选择。",
+    "P3":"胡玉杰、彭徽（2019）《财政分权、晋升激励与农村医疗卫生公共服务供给》——《当代财经》：省际面板；分权为正、晋升激励为负。",
+    "P4":"王克敏等（2017）《产业政策、政府支持与公司投资效率研究》——《管理世界》：信息不对称下政府识别失灵导致过度投资。",
+    "P5":"张兴祥、何昊翰（2023）《从项目制到共同体构建》——《福建师范大学学报》：项目制四大运行限度；以治理共同体超越。",
+    "P6":"柴盈、曾云敏（2012）《管理制度对我国农田水利政府投资效率的影响》——《农业经济问题》：四种制度效率排序；准公共部门最优。",
+    "P7":"唐丽霞、丁悦（2022）《激励、引导和规制》——《贵州社会科学》：积分制/村规民约/信用体系的三元内生机制。",
+    "P8":"邢成举、吴春来（2023）《领导注意力、项目分配与政策投入的资源陷阱》——《公共管理学报》：资源陷阱；共享性条件与内生性经验方可推广。",
+    "P9":"睢党臣（2007）《农村公共产品供给结构研究》（博士论文）：四维排序＋德尔菲集成；医疗卫生＞基础教育＞基础设施。",
+    "P10":"傅才武、刘倩（2020）《农村公共文化服务供需失衡背后的体制溯源》——《山东大学学报》：认可度模型；计划型供给结构性失效。",
+    "P11":"李波（2018）《农村环境治理——从管控式治理向参与式治理的转变》（博士论文）：达标压力型体制；参与式治理与双轨政治重构。"
+  };
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+  var info = document.getElementById('info');
+  var search = document.getElementById('search');
+  var reset = document.getElementById('reset');
+
+  function clearAll(){
+    chips.forEach(function(c){ c.classList.remove('active','dim','hit'); });
+    info.style.display = 'none';
+  }
+  function showPaper(p){
+    info.innerHTML = '<b>' + p + '</b>　' + PAPERS[p] + '　（共出现 ' + chips.filter(function(c){return c.dataset.p===p;}).length + ' 处）';
+    info.style.display = 'block';
+  }
+  chips.forEach(function(c){
+    c.addEventListener('click', function(){
+      var p = c.dataset.p;
+      var wasActive = c.classList.contains('active');
+      clearAll();
+      if(!wasActive){
+        chips.forEach(function(x){
+          if(x.dataset.p === p) x.classList.add('active'); else x.classList.add('dim');
+        });
+        showPaper(p);
+        search.value = '';
+      }
+    });
+  });
+  search.addEventListener('input', function(){
+    var q = search.value.trim().toLowerCase();
+    clearAll();
+    if(!q) return;
+    var matched = {};
+    chips.forEach(function(c){
+      var hay = (c.dataset.p + ' ' + c.textContent).toLowerCase();
+      if(hay.indexOf(q) > -1){ c.classList.add('hit'); matched[c.dataset.p] = true; }
+      else c.classList.add('dim');
+    });
+    var keys = Object.keys(matched);
+    if(keys.length === 1){ showPaper(keys[0]); }
+    else if(keys.length > 1){
+      info.innerHTML = '匹配到 <b>' + keys.length + '</b> 篇论文：' + keys.join('、') + '（输入更精确的编号或作者可查看单篇详情）';
+      info.style.display = 'block';
+    }
+  });
+  reset.addEventListener('click', function(){ search.value=''; clearAll(); });
+</script>
+</body>
+</html>
